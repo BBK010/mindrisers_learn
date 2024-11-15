@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .todo-container {
+            background-color: #bbdefb;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4fc3f7;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .task-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #b2ebf2;
+        }
+        .task-input input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #b2ebf2;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .task-input button {
+            background-color: #0288d1;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .task-input button:hover {
+            background-color: #0277bd;
+        }
+        .message {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #b2ebf2;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-text {
+            font-size: 18px;
+            color: #333;
+        }
+        .task-buttons {
+            display: flex;
+        }
+        .task-buttons button {
+            background-color: #d32f2f;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+        .task-buttons button:hover {
+            background-color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="todo-container">
+        <div class="header">
+            <h1>TODO List</h1>
+        </div>
+        <div class="task-input">
+            <input type="text" id="new-task" placeholder="Add a new task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <div class="message" id="message"></div>
+        <ul class="task-list" id="task-list">
+        </ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('new-task');
+            const taskText = taskInput.value.trim();
+            if (taskText === '') {
+                showMessage('Please enter a task.');
+                return;
+            }
+
+            const taskList = document.getElementById('task-list');
+            const existingTasks = taskList.getElementsByTagName('li');
+
+            for (let i = 0; i < existingTasks.length; i++) {
+                if (existingTasks[i].querySelector('.task-text').textContent === taskText) {
+                    showMessage('Task already exists.');
+                    return;
+                }
+            }
+
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task-item';
+
+            const taskTextSpan = document.createElement('span');
+            taskTextSpan.className = 'task-text';
+            taskTextSpan.textContent = taskText;
+
+            const taskButtonsDiv = document.createElement('div');
+            taskButtonsDiv.className = 'task-buttons';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = function() {
+                taskList.removeChild(taskItem);
+                showMessage('');
+            };
+
+            taskButtonsDiv.appendChild(deleteButton);
+            taskItem.appendChild(taskTextSpan);
+            taskItem.appendChild(taskButtonsDiv);
+            taskList.appendChild(taskItem);
+
+            taskInput.value = '';
+            showMessage('');
+        }
+
+        function showMessage(msg) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = msg;
+        }
+    </script>
+</body>
+</html>
